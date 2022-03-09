@@ -1,9 +1,9 @@
 ![CI](https://github.com/qodatecnologia/labqoda-api/workflows/CI/badge.svg)
 ---
 
-# Labqoda API
+# API
 
-Labqoda API
+API
 
 ## Setup
 
