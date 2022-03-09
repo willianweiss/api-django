@@ -1,0 +1,50 @@
+FROM python:3.8-slim
+
+# create directory for the app user
+RUN mkdir -p /home/app
+RUN mkdir -p /home/appuser/src/labqoda/static
+RUN mkdir -p /home/appuser/src/labqoda/staticfiles
+RUN mkdir -p /home/appuser/src/labqoda/mediafiles
+
+# create the app user
+RUN groupadd -r app && useradd -r -g app app
+
+# install dependencies
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends  \
+ git libmagic-dev openssl build-essential apt-utils \
+ default-libmysqlclient-dev libssl-dev gcc \
+ libssl-dev zlib1g-dev libbz2-dev strace libreadline-dev \
+ libsqlite3-dev wget curl llvm libncurses5-dev \
+ libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl \
+ libpq-dev libcurl4-openssl-dev libssl-dev tree python-pycurl \
+ libcairo2 libpango-1.0-0 libpangocairo-1.0-0 libgdk-pixbuf2.0-0 libffi-dev shared-mime-info \
+ libgnutls28-dev inetutils-ping ncdu inetutils-telnet -y \
+ && apt-get -y autoremove \
+ && rm -fr /var/lib/apt/lists/* \
+ && rm -fr /var/cache/apt/archives/*
+
+# env
+ENV POETRY_VIRTUALENVS_CREATE false
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+ENV PYTHONPATH .
+
+COPY poetry.lock pyproject.toml ./
+
+RUN pip install --no-cache-dir -U pip poetry
+RUN poetry install --no-dev
+
+# create the appropriate directories
+WORKDIR /home/appuser
+COPY . /home/appuser
+
+# chown all the files to the app user
+RUN chown -R app:app /home/appuser
+
+# change to the app user
+USER app
+
+EXPOSE 8080
+
+CMD $DOCKER_CMD

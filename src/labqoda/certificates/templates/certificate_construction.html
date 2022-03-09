@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+    <div class="page-content">
+        <br>
+        <br>
+        <br>
+        <a href="{% url 'users:dashboard' %}" class="profile-icon-back" uk-tooltip=" pos: right ;title: Voltar ao Perfil">
+            <i class="icon-feather-arrow-left"></i>
+        </a>
+        <h3 style="text-align: center;"> Seus certificado está sendo produzido, em breve <br> estará disponivel!!! </h3>
+
+    </div>
+{% endblock %}

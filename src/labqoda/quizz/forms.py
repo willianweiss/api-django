@@ -1,0 +1,12 @@
+from django import forms
+
+from .models import Question
+
+
+class QuestionForm(forms.ModelForm):
+    class Meta:
+        model = Question
+        fields = "__all__"
+        widgets = {
+            "type": forms.Select(attrs={"onchange": "showGroup();"}),
+        }

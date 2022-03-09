@@ -1,0 +1,51 @@
+<fieldset class="module aligned {{ fieldset.classes }} help_text_custom">
+    <div class="esquerda">
+    {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}
+    {% if fieldset.description %}
+        <div class="description">{{ fieldset.description|safe }}</div>
+    {% endif %}
+    {% for line in fieldset %}
+        <div class="form-row{% if line.fields|length_is:'1' and line.errors %} errors{% endif %}{% if not line.has_visible_field %} hidden{% endif %}{% for field in line %}{% if field.field.name %} field-{{ field.field.name }}{% endif %}{% endfor %}">
+            {% if line.fields|length_is:'1' %}{{ line.errors }}{% endif %}
+            {% for field in line %}
+                <div{% if not line.fields|length_is:'1' %} class="field-box{% if field.field.name %} field-{{ field.field.name }}{% endif %}{% if not field.is_readonly and field.errors %} errors{% endif %}{% if field.field.is_hidden %} hidden{% endif %}"{% elif field.is_checkbox %} class="checkbox-row"{% endif %}>
+                    {% if not line.fields|length_is:'1' and not field.is_readonly %}{{ field.errors }}{% endif %}
+                    {% if field.is_checkbox %}
+                        {{ field.field }}{{ field.label_tag }}
+                    {% else %}
+                        {{ field.label_tag }}
+                        {% if field.is_readonly %}
+                            <p>{{ field.contents }}</p>
+                        {% else %}
+                            {{ field.field }}
+                        {% endif %}
+                    {% endif %}
+                    {% if field.field.help_text %}
+                        <p class="help">{{ field.field.help_text|safe }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+    </div>
+
+    {% verbatim %}
+    <div class="direita">
+        <h1>Criacao do Certificado</h1>
+        <p>Durante o Preenchimento do Texto padrao do certificado, use estas palavras chaves para adicionar os campo desejados no certificado</p>
+        <p>{{ name }} - Para Inserir o nome do aluno</p>
+        <p>{{ email }} - Para Inserir o email do aluno</p>
+        <p>{{ course_name }} - Para Inserir o nome do curso </p>
+        <p>{{ course_duration }} - Para Inserir a duração do curso </p>
+        <p>{{ date_of_issue }} - Para Inserir a data de emissao </p>
+        <p>{{ verification_code }} - Codigo de Verificação </p>
+
+    </div>
+
+    <!-- div class="direita" style="text-align: center;">
+        <br>
+        <a href="#">Vizualizar exemplo de certificado!</a>
+        <br>
+    </div -->
+    {% endverbatim %}
+</fieldset>

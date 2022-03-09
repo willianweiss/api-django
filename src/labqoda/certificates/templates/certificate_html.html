@@ -1,0 +1,70 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Certificado</title>
+
+    <style>
+
+        .body_certificado {
+            position: relative;
+            width:300mm;
+            height:210mm;
+            font-size: 22px;
+            text-align: justify;
+            overflow: hidden;
+            margin: 0 auto;
+            top: 5mm;
+        }
+
+        @media print {
+            @page {
+                size: landscape
+            }
+            .body_certificado {
+                width: 29.7cm;
+                height: 21cm;
+            }
+        }
+
+        .imagem_fundo {
+            position:absolute;
+            top:0px;
+            left:0px;
+            width: 29.7cm;
+            height: 21cm;
+
+        }
+
+        .texto_certificado {
+            position:absolute;
+            top:92mm;
+            left:34mm;
+            width:200mm;
+            font-size: 22px;
+        }
+        .link_certificado{
+            position: absolute;
+            top: 94%;
+            left: 3%;
+            font-size: 16px;
+        }
+        #certificado_invalido{
+            margin-top: 3%;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div id="certificado" class="body_certificado">
+        <img class='imagem_fundo' src="{{ certificate.image.url }}" />
+        <div class='texto_certificado'>
+            {% autoescape off %}{{ certificate_text }}{% endautoescape %}
+        </div>
+    </div>
+</body>
+
+</html>

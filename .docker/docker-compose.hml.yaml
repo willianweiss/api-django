@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  api:
+    build:
+      context: ../
+      dockerfile: .docker/Dockerfile.prod
+    env_file:
+      - ".env.hml"
+    volumes:
+      - static_volume:/home/app/web/staticfiles
+      - media_volume:/home/app/web/mediafiles
+    expose:
+      - 8080
+    depends_on: 
+    - db
+    links:
+    - db
+  
+  nginx_api:
+    build: ./nginx
+    volumes:
+      - static_volume:/home/app/web/staticfiles
+      - media_volume:/home/app/web/mediafiles
+    ports:
+      - 8080:8080
+    depends_on:
+      - api
+
+  db:
+    image: mysql:5.7
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: labqoda
+      MYSQL_DATABASE: labqoda_api
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: labqoda123
+    ports:
+      - 3306:3306
+
+volumes:
+  db_data: {}
+  static_volume:
+  media_volume:

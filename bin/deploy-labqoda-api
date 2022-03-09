@@ -1,0 +1,18 @@
+#!/bin/bash
+DIR_BASE="/home/ec2-user/labqoda-api/"
+LOG="${DIR_BASE}/bin/command.log"
+
+function deploy() {
+    cd ${DIR_BASE}
+    echo "Git Fetching"
+    git fetch >> ${LOG}
+    echo "Git Pulling"
+    git pull >> ${LOG}
+    echo "docker-compose stop"
+    docker-compose -f .docker/docker-compose.prod.yaml stop >> ${LOG}
+    echo "docker-compose up"
+    docker-compose -f .docker/docker-compose.prod.yaml up -d --build >> ${LOG}
+    echo "Remove old docker images"
+    docker rmi $(docker images --filter "dangling=true" -q --no-trunc)
+}
+deploy

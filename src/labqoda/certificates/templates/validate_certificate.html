@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+    <div class="page-content">
+        <div class="section bg-white" id="signup">
+            <div class="container-small">
+                <h2 class="text-center my-lg-6"> Valide Aqui o certificado! </h2>
+                <form class="uk-grid-small uk-flex uk-flex-bottom" uk-grid method="post">
+                    {% csrf_token %}
+
+                    <div class="uk-width-1-4@s"></div>
+                    <div class="uk-width-1-3@s">
+                        <div class="uk-form-label"></div>
+                        {{ form.certificate_code }}
+                    </div>
+                    
+                    <div class="uk-width-1-3@s">
+                        <button class="button soft-grey" type="submit">Validar o Certificado</button>
+                    </div>
+
+
+                    <div class="uk-width-1-4@s"></div>
+                    <div class="uk-width-1-3@s">
+                        <div class="uk-form-label"></div>
+                        {{ form.certificate_code.errors }}
+                    </div>
+
+                    <div class="uk-width-1-4@s"></div>
+                    <div class="uk-width-1-3@s"></div>
+                        
+                    {% if form.context %}
+                    <div class="uk-width-1-3@s">
+                        <h3 class="text-center my-lg-6"> Certificado Valido! </h3>
+                        <div class="uk-form-label"></div>
+                        {% if form.context.certificate_type == 'course' %}
+                        Nome do Aluno: <strong> {{ form.context.certificate_class.user.fullname }} </strong>
+                        <br>
+                        Curso: <strong> {{ form.context.certificate_class.course.name }}</strong> 
+                        <br>
+                        Duração: {{ form.context.certificate_class.course.duration }}
+                        
+                        
+                        
+                        {% elif form.context.certificate_type == 'path' %}
+                        Nome do Aluno: {{ form.context.certificate_class.user.fullname }}
+                        <br>
+                        Trilha: {{ form.context.certificate_class.path.name }}
+                        {% endif %}
+
+                        <br>
+                        Data de Conclusão: <strong> {{ form.context.certificate_class.date_of_issue }} </strong>
+                    </div>
+                    {% endif %}
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

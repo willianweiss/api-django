@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<!-- Content -->
+    <div class="page-content">
+        <div class="container">
+            <div class="mt-lg-5" uk-grid>
+
+                <div class="uk-width-1-6@m">
+                    <a href="{% url 'users:dashboard' %}" class="profile-icon-back" uk-tooltip=" pos: right ;title: Voltar ao Perfil">
+                        <i class="icon-feather-arrow-left"></i>
+                    </a>
+
+                </div>
+
+                <div class="uk-width-1-4@m">
+                    <div class="sidebar-filter" uk-sticky="top:20 ;offset: 90; bottom: true ; media : @m">
+                        <button class="btn-sidebar-filter"
+                            uk-toggle="target: .sidebar-filter; cls: sidebar-filter-visible">Filter </button>
+                        <div class="sidebar-filter-contents">
+                            <h4> Filtros </h4>
+                            <ul class="sidebar-filter-list" uk-accordion="multiple: true">
+                                <li class="uk-open">
+                                    <a class="uk-accordion-title" href="#">Tipo do certificado</a>
+                                    <div class="uk-accordion-content">
+                                        <div class="uk-form-controls">
+                                            <label>
+                                                <input class="uk-radio" type="radio" name="radio1" onclick="window.location='?type=course';">
+                                                <span class="test">Cursos <span> ({{courses_certificates.count}}) </span> </span>
+                                            </label>
+                                            <label>
+                                                <input class="uk-radio" type="radio" name="radio1" onclick="window.location='?type=path';">
+                                                <span class="test">Trilhas <span> ({{paths_certificates.count}}) </span></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="uk-width-expand@m">
+
+                    <div class="section-header mb-lg-3">
+                        <div class="section-header-left">
+                            <!-- <h4> Web Development </h4> -->
+                        </div>
+                    </div>
+
+                    <!-- <h4> Web Development </h4> -->
+                    {% if type == 'path' %}
+                        {% for path in paths_certificates %}
+                        <div class="course-card course-card-list">
+                            <div class="course-card-thumbnail">
+                                {% if path.path.image %}
+                                <img src="{{ path.path.image.url }}">
+                                {% else %}
+                                <img src="{% static 'img/course-image.png' %}" alt="" />
+                                {% endif %}
+                                <a href="#" class="play-button-trigger"></a>
+                            </div>
+                            <div class="course-card-body">
+                                <a href="#">
+                                    <h4>{{ path.path.name }}</h4>
+                                </a>
+                                <p>{{ path.path.minidesc }}</p>
+                                <div class="course-details-info">
+                                    <ul>
+                                        <li> <i class="icon-feather-sliders"></i>{{ path.path.duration }}</li>
+                                        <li>
+                                            <span>
+                                                <a href="{% url 'certificates:certificate-path-pdf' path.code %}">
+                                                    Imprimir Certificado
+                                                </a>
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p>Nada por aqui.</p>
+                        {% endfor %}
+                    {% else %}
+                        {% for course in courses_certificates %}
+                        <div class="course-card course-card-list">
+                            <div class="course-card-thumbnail">
+                                {% if course.course.image %}
+                                <img src="{{ course.course.image.url }}">
+                                {% else %}
+                                <img src="{% static 'img/course-image.png' %}" alt="" />
+                                {% endif %}
+                                <a href="#" class="play-button-trigger"></a>
+                            </div>
+                            <div class="course-card-body">
+                                <a href="#">
+                                    <h4>{{ course.course.name }}</h4>
+                                </a>
+                                <p>{{ course.course.minidesc }}</p>
+                                <div class="course-details-info">
+                                    <ul>
+                                        <li> <i class="icon-feather-sliders"></i>{{ course.duration }}</li>
+                                        <li> <a href="#">{{ course.instructor }}</a> </li>
+                                        <li>
+                                            <span>
+                                                <a href="{% url 'certificates:certificate-course-pdf' course.code %}"">
+                                                    Imprimir Certificado
+                                                </a>
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p>Nada por aqui.</p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
